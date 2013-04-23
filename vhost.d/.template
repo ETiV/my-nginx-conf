@@ -1,0 +1,46 @@
+# For a Standard PHP Webhost;
+server  {
+    listen  ${port};
+    # listen  ${host}:${port};
+    # listen   [::]:80 default ipv6only=on; ## listen for ipv6
+
+    server_name     ${www.domain.name} ${alias.domain.name} ${another.domain.name};
+
+    root    /wwwroot/domain_name;
+    index   index.php index.html;
+
+	# location /doc/ {
+	# 	alias /usr/share/doc/;
+	# 	autoindex on;
+	# 	allow 127.0.0.1;
+	# 	deny all;
+	# }
+
+    include ngconf.d/error_page.conf;
+    include ngconf.d/php.conf;
+    include ngconf.d/cache.conf;
+}
+
+server {
+	listen 443 ssl;
+
+	server_name ${ssl.domain.name};
+
+	root /wwwroot/domain_name/ssl;
+
+	ssl_certificate /etc/nginx/certs/server.crt;
+	ssl_certificate_key /etc/nginx/certs/server.key;
+
+	# access_log /var/log/nginx/cloud.vinzv.de.access_log;
+	# error_log /var/log/nginx/cloud.vinzv.de.error_log info;
+
+	location / {
+		index index.php;
+	}
+	 
+	include ngconf.d/error_page.conf;
+	include ngconf.d/php.conf;
+    include ngconf.d/cache.conf;
+}
+
+# More examples, see at https://github.com/vinzv/nginx-conf
